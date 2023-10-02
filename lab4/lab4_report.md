@@ -65,6 +65,7 @@ Labels:             ...
 ...
 ```
 
+ippool.yml
 ```yaml
 apiVersion: crd.projectcalico.org/v1
 kind: IPPool
@@ -99,7 +100,8 @@ namespace/labs created
 ➜  ~ helm install react-app -n labs react-app
 ```
 
-```values.yaml
+values.yaml
+```yaml
 ...
 image:
   repository: ifilyaninitmo/itdt-contained-frontend
@@ -111,6 +113,7 @@ autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 2
+...
 ```
 
 ```bash
