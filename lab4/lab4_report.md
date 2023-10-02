@@ -10,8 +10,7 @@ Date of finished: 31.09.2023
 ---
 
 ```bash
-➜  lab4 git:(main) ✗ minikube start --network-plugin=cni --cni=calico -p=multinode
-➜  lab4 git:(main) ✗ minikube node add -p multinode
+➜  ~ minikube start --network-plugin=cni --cni=calico -p=multinode --nodes 2
 ```
 
 ```bash
@@ -76,6 +75,7 @@ spec:
   ipipMode: Always
   natOutgoing: true
   nodeSelector: rack == "1"
+  vxlanMode: Never
 ---
 apiVersion: crd.projectcalico.org/v1
 kind: IPPool
@@ -86,6 +86,7 @@ spec:
   ipipMode: Always
   natOutgoing: true
   nodeSelector: rack == "2"
+  vxlanMode: Never
 ```
 
 ```bash
@@ -123,34 +124,36 @@ autoscaling:
 ```bash
 ➜  lab4 git:(main) ✗ k get po -n labs -o wide
 NAME                        READY   STATUS    RESTARTS   AGE     IP             NODE            NOMINATED NODE   READINESS GATES
-react-app-f66d69d6b-g4mk5   1/1     Running   0          2m25s   10.244.1.129   multinode-m02   <none>           <none>
-react-app-f66d69d6b-ps8v6   1/1     Running   0          2m9s    10.244.0.193   multinode       <none>           <none>
+react-app-f66d69d6b-6jdg5   1/1     Running   0          9m27s   10.244.1.129   multinode-m02   <none>           <none>
+react-app-f66d69d6b-n9t2k   1/1     Running   0          9m12s   10.244.0.193   multinode       <none>           <none>
 ```
 
 ```bash
-➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-5sbrw 3001:3000
+➜  lab4 git:(main) ✗ k exec -ti -n labs pods/react-app-f66d69d6b-6jdg5 -- sh
+/frontend # ping 10.244.0.193
+PING 10.244.0.193 (10.244.0.193): 56 data bytes
+64 bytes from 10.244.0.193: seq=0 ttl=62 time=6.562 ms
+64 bytes from 10.244.0.193: seq=1 ttl=62 time=0.257 ms
+64 bytes from 10.244.0.193: seq=2 ttl=62 time=0.164 ms
+64 bytes from 10.244.0.193: seq=3 ttl=62 time=0.238 ms
+64 bytes from 10.244.0.193: seq=4 ttl=62 time=0.261 ms
+^C
+--- 10.244.0.193 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+```
+
+```bash
+➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-6jdg5 3001:3000
 Forwarding from 127.0.0.1:3001 -> 3000
 Forwarding from [::1]:3001 -> 3000
 ```
 
-![rack2.png](screenshots%2Frack2.png)
+![rack-1.png](screenshots%2Frack-1.png)
 
 ```bash
-➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-c6pb2 3002:3000
+➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-n9t2k 3002:3000
 Forwarding from 127.0.0.1:3002 -> 3000
 Forwarding from [::1]:3002 -> 3000
 ```
 
-![rack1.png](screenshots%2Frack1.png)
-
-```bash
-
-```
-
-```bash
-
-```
-
-```bash
-
-```
+![rack-2.png](screenshots%2Frack-2.png)
