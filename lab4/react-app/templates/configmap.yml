@@ -1,0 +1,23 @@
+{{- range $name, $configmap := .Values.configmaps}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "react-app.labels" $ | nindent 4 }}
+data:
+{{- range $key, $value := $configmap }}
+  {{- if eq (kindOf $value) "string" }}
+  {{ $key }}: {{ if contains "\n" $value }}|{{ $value | nindent 4 }}
+    {{ else }}{{ $value | quote }}{{ end }}
+  {{- else if eq (kindOf $value) "map" }}
+  {{ $key }}:
+{{- range $innerKey, $innerValue := $value }}
+    {{ $innerKey }}: {{ $innerValue | quote }}
+{{- end }}
+  {{- end }}
+{{- end }}
+---
+{{- end }}
+
+
