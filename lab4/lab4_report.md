@@ -8,11 +8,14 @@ Lab: Lab4
 Date of create: 28.09.2023  
 Date of finished: 31.09.2023
 ---
+### Выполнение лабораторной работы
 
+Запущен кластер с двумя нодами и плагином calico.
 ```bash
 ➜  ~ minikube start --network-plugin=cni --cni=calico -p=multinode --nodes 2
 ```
 
+Проверено наличие двух нод в кластере.
 ```bash
 ➜  ~ k get no
 NAME                 STATUS   ROLES           AGE     VERSION
@@ -20,6 +23,7 @@ multinode       Ready    control-plane   4m35s   v1.27.4
 multinode-m02   Ready    <none>          3m48s   v1.27.4
 ```
 
+Проверена установка calico в кластер.
 ```bash
 ➜  ~ k get po -l k8s-app=calico-node -A
 NAMESPACE     NAME                READY   STATUS    RESTARTS   AGE
@@ -27,6 +31,7 @@ kube-system   calico-node-4d7r9   1/1     Running   0          3m38s
 kube-system   calico-node-qjlxj   1/1     Running   0          4m8s
 ```
 
+Просмотрен cidr в стандартном ippool.
 ```bash
 ➜  ~ k get ippools.crd.projectcalico.org default-ipv4-ippool -o yaml
 ...
@@ -34,11 +39,13 @@ cidr: 10.244.0.0/16
 ...
 ```
 
+Удален стандартный ippool.
 ```bash
 ➜  ~ k delete ippools.crd.projectcalico.org default-ipv4-ippool
 ippool.crd.projectcalico.org "default-ipv4-ippool" deleted
 ```
 
+Ноды помечены по признаку воображаемой стойки.
 ```bash
 ➜  ~ k label no multinode rack=1
 node/multinode labeled
@@ -46,6 +53,7 @@ node/multinode labeled
 node/multinode-m02 labeled
 ```
 
+Проверено применение label к каждой ноде.
 ```bash
 ➜  ~ k describe no multinode
 Name:               multinode
@@ -63,6 +71,8 @@ Labels:             ...
                     rack=2
 ...
 ```
+
+Написаны ippool для раздачи ip адресов подам, распределенным на ноды с определенным лейблом.
 
 ippool.yml
 ```yaml
@@ -89,18 +99,22 @@ spec:
   vxlanMode: Never
 ```
 
+Применены crd ippool в кластер.
 ```bash
 ➜  lab4 git:(main) ✗ k apply -f ippool.yml
 ippool.crd.projectcalico.org/rack-1-ippool created
 ippool.crd.projectcalico.org/rack-2-ippool created
 ```
 
+Создано пространство имен labs.
 ```bash
 ➜  ~ k create ns labs
 namespace/labs created
 ➜  ~ helm install react-app -n labs react-app
 ```
 
+Отредактирован values.yaml. Указаны значения для образа, скейлинга и сервиса.
+ 
 values.yaml
 ```yaml
 ...
@@ -117,10 +131,12 @@ autoscaling:
 ...
 ```
 
+Установлены компоненты k8s в окружение labs.
 ```bash
 ➜  lab4 git:(main) ✗ helm install react-app -n labs react-app
 ```
 
+Проверены ip адреса, полученные подами.
 ```bash
 ➜  lab4 git:(main) ✗ k get po -n labs -o wide
 NAME                        READY   STATUS    RESTARTS   AGE     IP             NODE            NOMINATED NODE   READINESS GATES
@@ -128,6 +144,7 @@ react-app-f66d69d6b-6jdg5   1/1     Running   0          9m27s   10.244.1.129   
 react-app-f66d69d6b-n9t2k   1/1     Running   0          9m12s   10.244.0.193   multinode       <none>           <none>
 ```
 
+Пропингован под react-app-f66d69d6b-n9t2k из контейнера пода react-app-f66d69d6b-6jdg5.
 ```bash
 ➜  lab4 git:(main) ✗ k exec -ti -n labs pods/react-app-f66d69d6b-6jdg5 -- sh
 /frontend # ping 10.244.0.193
@@ -142,18 +159,29 @@ PING 10.244.0.193 (10.244.0.193): 56 data bytes
 5 packets transmitted, 5 packets received, 0% packet loss
 ```
 
+Локальный порт 3000 прокинут в контейнер.
 ```bash
 ➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-6jdg5 3001:3000
 Forwarding from 127.0.0.1:3001 -> 3000
 Forwarding from [::1]:3001 -> 3000
 ```
-
+Проверен ip, выданный поду.
 ![rack-1.png](screenshots%2Frack-1.png)
 
+Локальный порт 3000 прокинут в контейнер.
 ```bash
 ➜  lab4 git:(main) ✗ k -n labs port-forward pods/react-app-f66d69d6b-n9t2k 3002:3000
 Forwarding from 127.0.0.1:3002 -> 3000
 Forwarding from [::1]:3002 -> 3000
 ```
-
+Проверен ip, выданный поду.
 ![rack-2.png](screenshots%2Frack-2.png)
+
+### Схема организации контейнеров и сервисов 
+![lab4.drawio.svg](lab4.drawio.svg)
+
+При возникновении сложностей с calico-node совет проверить наличие параметра 
+```
+vxlanMode: Never
+```
+https://github.com/projectcalico/calico/issues/6442#issuecomment-1199637815

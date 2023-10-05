@@ -8,10 +8,13 @@ Lab: Lab2
 Date of create: 28.09.2023  
 Date of finished: 31.09.2023
 ---
+### Выполнение лабораторной работы
 
+Создан новый шаблон helm с именем react-app.
 ```bash
 ➜  lab2 git:(main) ✗ helm create react-app
 ```
+Отредактирован values.yaml. Указаны значения для образа, скейлинга, сервиса и переменных.
 
 values.yaml
 ```yaml
@@ -40,6 +43,8 @@ service:
   port: 3000
 ```
 
+Написан шаблон для создания configmap, который будет принимать на вход map, список key-value или key-многострочное знечение.
+
 configmap.yaml
 ```yaml
 {{- range $name, $configmap := .Values.configmaps}}
@@ -65,6 +70,8 @@ data:
 {{- end }}
 ```
 
+В Deployment указан какой configmap будет использоваться для дополнения переменных в контейнере.
+
 deployment.yaml
 ```yaml
 ...
@@ -82,10 +89,12 @@ deployment.yaml
 ...
 ```
 
+Установлены компоненты k8s в окружение labs.
 ```bash
-➜  lab2 git:(main) ✗ helm upgrade react-app -n labs react-app
+➜  lab2 git:(main) ✗ helm install react-app -n labs react-app
 ```
 
+Получен список подов в окружении labs.
 ```bash
 ➜  lab2 git:(main) ✗ k -n labs get po
 NAME                         READY   STATUS    RESTARTS   AGE
@@ -94,6 +103,7 @@ react-app-574799657d-sbzpx   1/1     Running   0          33s
 vault-7f9b5f988c-2s5tk       1/1     Running   0          69m
 ```
 
+Проверено наличие переменных непосредственно внутри контейнера. Выбор контейнера для проверки не повлияет на результат.
 ```bash
 ➜  lab2 git:(main) ✗ k -n labs exec -ti pods/react-app-574799657d-2ccbp -- sh
 /frontend # echo $REACT_APP_USERNAME
@@ -102,14 +112,17 @@ nizepart
 ITMO
 ```
 
+Локальный порт 3000 прокинут в контейнер.
 ```bash
 ➜  lab2 git:(main) ✗ k -n labs port-forward services/react-app 3000:3000
 Forwarding from 127.0.0.1:3000 -> 3000
 Forwarding from [::1]:3000 -> 3000
 ```
 
+Проверены заданные переменные на странице в веб браузере.
 ![react_app_web.png](screenshots%2Freact_app_web.png)
 
+Просмотрены логи контейнера.
 ```bash
 ➜  lab2 git:(main) ✗ k -n labs logs react-app-574799657d-5nkl4
 Builing frontend
@@ -122,3 +135,6 @@ Browserslist: caniuse-lite is outdated. Please run:
 build finished
 Server started on port 3000
 ```
+
+### Схема организации контейнеров и сервисов 
+![lab2.drawio.svg](lab2.drawio.svg)

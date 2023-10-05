@@ -1,0 +1,64 @@
+<mxfile host="Electron" modified="2023-10-05T10:57:17.397Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="GANrlFwuS8q_zFTVKeJK" version="22.0.2" type="device">
+  <diagram name="Страница — 1" id="Im1ipqhpt82EnKc-YsLn">
+    <mxGraphModel dx="906" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A7DEZniaGQUI35fXbSPs-15" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="720" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="135" width="630" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="180" width="220" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-4" value="pod&lt;br&gt;name: vault" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="510" y="210" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-5" value="label&lt;br&gt;app.kubernetes.io/name: vault" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="475" y="260" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-6" value="port&lt;br&gt;name: http" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="310" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-9" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="180" width="220" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-10" value="service&lt;br&gt;type: NodePort&lt;br&gt;name: vault" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="180" y="210" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="A7DEZniaGQUI35fXbSPs-11" target="A7DEZniaGQUI35fXbSPs-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-11" value="selector&lt;br&gt;app.kubernetes.io/name: vault" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="145" y="260" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-12" value="ports&lt;br&gt;port: 8200&lt;br&gt;targetPort: http&lt;br&gt;nodePort: 32766" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="310" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-13" value="namespace&lt;br&gt;labs" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="375" y="150" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="A7DEZniaGQUI35fXbSPs-16" target="A7DEZniaGQUI35fXbSPs-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-16" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-17" value="port: 32766" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="455" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-18" value="minikube node" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="345" y="100" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="A7DEZniaGQUI35fXbSPs-20" target="A7DEZniaGQUI35fXbSPs-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A7DEZniaGQUI35fXbSPs-20" value="traffic" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="540" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

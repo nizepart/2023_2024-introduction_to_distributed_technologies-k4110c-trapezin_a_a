@@ -8,7 +8,9 @@ Lab: Lab3
 Date of create: 29.09.2023  
 Date of finished: 31.09.2023
 ---
+### Выполнение лабораторной работы
 
+Сгенерирован tls сертификат mydomainitmo.crt и ключ к нему.
 ```bash
 openssl req -new -newkey rsa:2048 -nodes \
   -subj "/C=GB/ST=England/L=Brighton/O=Example/CN=*.mydomainitmo.com/emailAddress=info@example.com" \
@@ -19,16 +21,18 @@ openssl req -new -newkey rsa:2048 -nodes \
   -x509 -days 3650 -extensions SAN -out mydomainitmo.crt
 ```
 
+Проверен сгенерированный сертификат.
 ```bash
 openssl x509 -in /tmp/example.com.crt -noout -text
 ```
 
-
+Создан секрет типа kubernetes.io/tls для использования сгенерированного сертификата в ингрессе.
 ```bash
 ➜  lab3 git:(main) ✗ k create secret tls react-app-tls --cert=server.crt --key=private.key -n labs
 secret/react-app-tls created
 ```
 
+Отредактирован values.yaml для генерации ингресса. 
 values.yaml
 ```yaml
 ingress:
@@ -50,6 +54,12 @@ ingress:
         - mydomainitmo.com
 ```
 
+Обновлен helm release для генерации компонентов k8s в окружении labs.
+```bash
+➜  lab3 git:(main) ✗ helm update react-app -n labs react-app
+```
+
+Выполнена команда для доступа к ingress.
 ```bash
 ➜  ~ minikube tunnel
 ✅  Tunnel successfully started
@@ -61,11 +71,18 @@ ingress:
 🏃  Starting tunnel for service react-app.
 ```
 
+Прописаны ip адрес и FQDN в /etc/hosts.
+
 /etc/hosts
 ```bash
 127.0.0.1    mydomainitmo.com
 ```
 
+Проверена работоспособность ингресса mydomainitmo.com.
 ![app_web.png](screenshots%2Fapp_web.png)
 
+Проверена информация об используемом сертификате.
 ![crt.png](screenshots%2Fcrt.png)
+
+### Схема организации контейнеров и сервисов 
+![lab3.drawio.svg](lab3.drawio.svg)

@@ -8,7 +8,9 @@ Lab: Lab1
 Date of create: 28.09.2023  
 Date of finished: 31.09.2023
 ---
+### Выполнение лабораторной работы
 
+Проверена текущая версию докера
 ```bash
 docker version
 Client:
@@ -42,6 +44,7 @@ Server: Docker Desktop 4.15.0 (93002)
   GitCommit:        de40ad0
 ```
 
+Развернут кластер minikube. Проверена работоспособность.
 ```bash
 ➜  2023_2024-introduction_to_distributed_technologies-k4110c-trapezin_a_a git:(main) ✗ minikube start
 😄  minikube v1.31.2 on Darwin 13.5.1
@@ -66,21 +69,24 @@ Server: Docker Desktop 4.15.0 (93002)
     ▪ Want kubectl v1.27.4? Try 'minikube kubectl -- get pods -A'
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 ➜  2023_2024-introduction_to_distributed_technologies-k4110c-trapezin_a_a git:(main) ✗ kubectx minikube
-ls -laSwitched to context "minikube".
+Switched to context "minikube".
 ➜  2023_2024-introduction_to_distributed_technologies-k4110c-trapezin_a_a git:(main) ✗ k get all
 NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   80s
 ```
 
+Создано пространство имен для выполнения лабораторных имен.
 ```bash
 ➜  lab1 git:(main) ✗ k create ns labs
 namespace/labs created
 ```
 
+Создан стандартный шаблон helm.
 ```bash
 ➜  lab1 git:(main) ✗ helm create vault
 ```
 
+Отредактирован values.yaml файл, через который происходит подстановка основных значений в шаблоны helm. Задан образ контейнера, тип сервиса и порт, на котором запускается приложение.
 ```yaml
 image:
   repository: vault
@@ -90,16 +96,19 @@ service:
   port: 8200
 ```
 
+Установлены приложения k8s в окружение labs с помощью ранее заготовленных шаблонов.
 ```bash
 ➜  lab1 git:(main) ✗ helm install vault -n labs vault
 ```
 
+Проверено наличие пода.
 ```bash
 ➜  lab1 git:(main) ✗ k -n labs get po
 NAME                     READY   STATUS    RESTARTS   AGE
 vault-7f9b5f988c-2s5tk   1/1     Running   0          2m45s
 ```
 
+Просмотрены логи контейнера для нахождения рут токена от приложения vault.
 ```bash
 ➜  lab1 git:(main) ✗ k -n labs logs vault-7f9b5f988c-2s5tk
 ...
@@ -107,19 +116,18 @@ Root Token: hvs.KiqedfhKVVl56xlA8F6wmtc2
 ...
 ```
 
-```bash
-➜  lab1 git:(main) ✗ k -n labs logs vault-7f9b5f988c-2s5tk
-...
-Root Token: hvs.KiqedfhKVVl56xlA8F6wmtc2
-...
-```
-
+Прокинут локальный порт 8200 в контейнер.
 ```bash
 ➜  lab1 git:(main) ✗ k -n labs port-forward service/vault 8200:8200
 Forwarding from 127.0.0.1:8200 -> 8200
 Forwarding from [::1]:8200 -> 8200
 ```
 
+Теперь vault дотсупен по ссылке http://localhost:8000
 ![login_page.png](screenshots%2Flogin_page.png)
 
+Для аторизации в vault в поле токена введен root token из логов.
 ![vault_main_page.png](screenshots%2Fvault_main_page.png)
+
+### Схема организации контейнеров и сервисов 
+![lab1.drawio.svg](lab1.drawio.svg)
